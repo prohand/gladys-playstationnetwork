@@ -6,6 +6,8 @@ All notable changes to this integration are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.0.1] - 2026-10-14
+
 ### Added
 
 - PlayStation Network sign-in with an NPSSO token: the tokens are renewed on their own and kept in `/data`, the NPSSO itself is never written nor logged.
@@ -19,4 +21,5 @@ All notable changes to this integration are documented here. The format follows
 - "Test the connection" and "Find my consoles" buttons in the configuration.
 - English, French, German and Spanish everywhere: configuration, messages, widget and documentation.
 
-[Unreleased]: https://github.com/prohand/gladys-playstationnetwork/commits/main
+[Unreleased]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.0.1...HEAD
+[0.0.1]: https://github.com/prohand/gladys-playstationnetwork/releases/tag/v0.0.1
