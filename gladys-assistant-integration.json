@@ -1,0 +1,686 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "PlayStation Network",
+  "description": {
+    "en": "Follow PlayStation Network presence, games, play time, trophies and PS4/PS5 consoles.",
+    "fr": "Suivez présence, jeux, temps de jeu et trophées PlayStation Network, et vos consoles PS4/PS5.",
+    "de": "Verfolge PSN-Präsenz, Spiele, Spielzeit, Trophäen und deine PS4/PS5-Konsolen.",
+    "es": "Siga presencia, juegos, tiempo de juego y trofeos de PSN, y sus consolas PS4/PS5."
+  },
+  "version": "0.0.0",
+  "docker_image": "ghcr.io/prohand/gladys-playstationnetwork:0.0.0",
+  "gladys_version": ">=5.1.0",
+  "cover_image": "https://raw.githubusercontent.com/prohand/gladys-playstationnetwork/main/cover.png",
+  "categories": ["multimedia", "services"],
+  "transports": ["local", "cloud"],
+  "network_discovery": [
+    {
+      "type": "udp-active-broadcast",
+      "ports": [9302, 987]
+    }
+  ],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "Getting started",
+        "fr": "Pour commencer",
+        "de": "Erste Schritte",
+        "es": "Primeros pasos"
+      },
+      "description": {
+        "en": "Sony offers no public API: the integration signs in like the PlayStation App, with an NPSSO token. 1) Sign in on playstation.com with your account. 2) In the same browser, open the \"Get my NPSSO\" link below. 3) Copy the 64-character value of \"npsso\" (or the whole page) and paste it below. The token is a key to your account: keep it secret. It lasts about two months; the integration tells you when it must be renewed.",
+        "fr": "Sony ne propose pas d'API publique : l'intégration se connecte comme l'application PlayStation, avec un jeton NPSSO. 1) Connectez-vous sur playstation.com avec votre compte. 2) Dans le même navigateur, ouvrez le lien « Obtenir mon NPSSO » ci-dessous. 3) Copiez la valeur de 64 caractères de « npsso » (ou toute la page) et collez-la ci-dessous. Ce jeton est une clé de votre compte : gardez-le secret. Il dure environ deux mois ; l'intégration vous prévient quand il faut le renouveler.",
+        "de": "Sony bietet keine öffentliche API: Die Integration meldet sich wie die PlayStation App mit einem NPSSO-Token an. 1) Melde dich auf playstation.com mit deinem Konto an. 2) Öffne im selben Browser den Link „Mein NPSSO abrufen“ unten. 3) Kopiere den 64-stelligen Wert von „npsso“ (oder die ganze Seite) und füge ihn unten ein. Das Token ist ein Schlüssel zu deinem Konto: Halte es geheim. Es gilt etwa zwei Monate; die Integration sagt dir, wann es erneuert werden muss.",
+        "es": "Sony no ofrece una API pública: la integración inicia sesión como la PlayStation App, con un token NPSSO. 1) Inicie sesión en playstation.com con su cuenta. 2) En el mismo navegador, abra el enlace «Obtener mi NPSSO» de abajo. 3) Copie el valor de 64 caracteres de «npsso» (o toda la página) y péguelo abajo. El token es una llave de su cuenta: manténgalo en secreto. Dura unos dos meses; la integración le avisa cuando hay que renovarlo."
+      },
+      "links": [
+        {
+          "url": "https://www.playstation.com/",
+          "label": {
+            "en": "Sign in on playstation.com",
+            "fr": "Se connecter sur playstation.com",
+            "de": "Auf playstation.com anmelden",
+            "es": "Iniciar sesión en playstation.com"
+          }
+        },
+        {
+          "url": "https://ca.account.sony.com/api/v1/ssocookie",
+          "label": {
+            "en": "Get my NPSSO",
+            "fr": "Obtenir mon NPSSO",
+            "de": "Mein NPSSO abrufen",
+            "es": "Obtener mi NPSSO"
+          }
+        }
+      ]
+    },
+    {
+      "key": "npsso",
+      "type": "secret",
+      "label": {
+        "en": "NPSSO token",
+        "fr": "Jeton NPSSO",
+        "de": "NPSSO-Token",
+        "es": "Token NPSSO"
+      },
+      "description": {
+        "en": "The 64-character value shown by the \"Get my NPSSO\" page.",
+        "fr": "La valeur de 64 caractères affichée par la page « Obtenir mon NPSSO ».",
+        "de": "Der 64-stellige Wert, den die Seite „Mein NPSSO abrufen“ anzeigt.",
+        "es": "El valor de 64 caracteres que muestra la página «Obtener mi NPSSO»."
+      },
+      "required": true
+    },
+    {
+      "key": "friends",
+      "type": "string",
+      "label": {
+        "en": "Friends to follow",
+        "fr": "Amis à suivre",
+        "de": "Zu verfolgende Freunde",
+        "es": "Amigos a seguir"
+      },
+      "description": {
+        "en": "Online IDs separated by commas, 10 at most. Each one becomes a device with its presence and current game (their privacy settings must allow it).",
+        "fr": "Identifiants en ligne séparés par des virgules, 10 au plus. Chacun devient un appareil avec sa présence et son jeu en cours (ses paramètres de confidentialité doivent le permettre).",
+        "de": "Online-IDs durch Kommas getrennt, höchstens 10. Jede wird ein Gerät mit Präsenz und aktuellem Spiel (die Privatsphäre-Einstellungen müssen es erlauben).",
+        "es": "ID en línea separados por comas, 10 como máximo. Cada uno se convierte en un dispositivo con su presencia y juego actual (su configuración de privacidad debe permitirlo)."
+      },
+      "placeholder": {
+        "en": "e.g. Friend_1, Friend-2",
+        "fr": "ex. Ami_1, Ami-2",
+        "de": "z. B. Freund_1, Freund-2",
+        "es": "p. ej. Amigo_1, Amigo-2"
+      },
+      "required": false
+    },
+    {
+      "key": "local",
+      "type": "section",
+      "label": {
+        "en": "Consoles on the local network",
+        "fr": "Consoles sur le réseau local",
+        "de": "Konsolen im lokalen Netzwerk",
+        "es": "Consolas en la red local"
+      },
+      "description": {
+        "en": "A PS4 or PS5 tells on the local network whether it is on or in rest mode, if \"Stay connected to the internet\" is on in its power saving settings (PS5: also \"Enable turning on PS5 from network\"). Use \"Find my consoles\" below, or type the console's IP address if the search does not find it. Without the local network, the console state follows your PSN presence.",
+        "fr": "Une PS4 ou une PS5 indique sur le réseau local si elle est allumée ou en veille, si « Rester connecté à Internet » est activé dans ses paramètres d'économie d'énergie (PS5 : aussi « Activer l'allumage de la PS5 depuis le réseau »). Utilisez « Trouver mes consoles » ci-dessous, ou saisissez l'adresse IP de la console si la recherche ne la trouve pas. Sans le réseau local, l'état de la console suit votre présence PSN.",
+        "de": "Eine PS4 oder PS5 meldet im lokalen Netzwerk, ob sie an oder im Ruhemodus ist, wenn „Mit dem Internet verbunden bleiben“ in den Energiespareinstellungen aktiv ist (PS5: auch „Einschalten der PS5 über das Netzwerk aktivieren“). Nutze „Meine Konsolen finden“ unten oder gib die IP-Adresse der Konsole ein, falls die Suche sie nicht findet. Ohne lokales Netzwerk folgt der Konsolenstatus deiner PSN-Präsenz.",
+        "es": "Una PS4 o PS5 indica en la red local si está encendida o en reposo, si «Permanecer conectado a Internet» está activado en sus ajustes de ahorro de energía (PS5: también «Habilitar el encendido de la PS5 desde la red»). Use «Buscar mis consolas» abajo, o escriba la dirección IP de la consola si la búsqueda no la encuentra. Sin la red local, el estado de la consola sigue su presencia en PSN."
+      }
+    },
+    {
+      "key": "console_ip",
+      "type": "string",
+      "label": {
+        "en": "Console IP address (optional)",
+        "fr": "Adresse IP de la console (facultatif)",
+        "de": "IP-Adresse der Konsole (optional)",
+        "es": "Dirección IP de la consola (opcional)"
+      },
+      "placeholder": {
+        "en": "e.g. 192.168.1.20",
+        "fr": "ex. 192.168.1.20",
+        "de": "z. B. 192.168.1.20",
+        "es": "p. ej. 192.168.1.20"
+      },
+      "required": false
+    },
+    {
+      "key": "advanced",
+      "type": "section",
+      "label": {
+        "en": "Advanced",
+        "fr": "Avancé",
+        "de": "Erweitert",
+        "es": "Avanzado"
+      }
+    },
+    {
+      "key": "poll_frequency",
+      "type": "number",
+      "label": {
+        "en": "Refresh interval (s)",
+        "fr": "Intervalle de rafraîchissement (s)",
+        "de": "Aktualisierungsintervall (s)",
+        "es": "Intervalo de actualización (s)"
+      },
+      "description": {
+        "en": "How often the PlayStation Network is read, in seconds (one minute minimum: Sony limits the number of requests).",
+        "fr": "Fréquence de lecture du PlayStation Network, en secondes (une minute minimum : Sony limite le nombre de requêtes).",
+        "de": "Wie oft das PlayStation Network gelesen wird, in Sekunden (mindestens eine Minute: Sony begrenzt die Anzahl der Anfragen).",
+        "es": "Frecuencia de lectura de PlayStation Network, en segundos (un minuto como mínimo: Sony limita el número de solicitudes)."
+      },
+      "required": false,
+      "default": 120,
+      "min": 60,
+      "max": 3600
+    },
+    {
+      "key": "timezone",
+      "type": "string",
+      "label": {
+        "en": "Time zone",
+        "fr": "Fuseau horaire",
+        "de": "Zeitzone",
+        "es": "Zona horaria"
+      },
+      "description": {
+        "en": "\"Played today\" restarts from zero at midnight in this time zone.",
+        "fr": "« Joué aujourd'hui » repart de zéro à minuit dans ce fuseau horaire.",
+        "de": "„Heute gespielt“ beginnt um Mitternacht in dieser Zeitzone wieder bei null.",
+        "es": "«Jugado hoy» vuelve a cero a medianoche en esta zona horaria."
+      },
+      "placeholder": {
+        "en": "e.g. Europe/Paris",
+        "fr": "ex. Europe/Paris",
+        "de": "z. B. Europe/Berlin",
+        "es": "p. ej. Europe/Madrid"
+      },
+      "required": false,
+      "default": "Europe/Paris"
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "timeout_seconds": 60
+    },
+    {
+      "key": "find_consoles",
+      "label": {
+        "en": "Find my consoles",
+        "fr": "Trouver mes consoles",
+        "de": "Meine Konsolen finden",
+        "es": "Buscar mis consolas"
+      },
+      "timeout_seconds": 60
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "game_started",
+      "label": {
+        "en": "A game started",
+        "fr": "Un jeu a démarré",
+        "de": "Ein Spiel wurde gestartet",
+        "es": "Un juego ha empezado"
+      },
+      "description": {
+        "en": "The PSN account or a followed friend started playing a game.",
+        "fr": "Le compte PSN ou un ami suivi a commencé à jouer à un jeu.",
+        "de": "Das PSN-Konto oder ein verfolgter Freund hat ein Spiel gestartet.",
+        "es": "La cuenta PSN o un amigo seguido empezó a jugar a un juego."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Player",
+            "fr": "Joueur",
+            "de": "Spieler",
+            "es": "Jugador"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "online_id",
+          "type": "string",
+          "label": {
+            "en": "Online ID",
+            "fr": "Identifiant en ligne",
+            "de": "Online-ID",
+            "es": "ID en línea"
+          }
+        },
+        {
+          "key": "game",
+          "type": "string",
+          "label": {
+            "en": "Game",
+            "fr": "Jeu",
+            "de": "Spiel",
+            "es": "Juego"
+          }
+        },
+        {
+          "key": "title_id",
+          "type": "string",
+          "label": {
+            "en": "Title ID",
+            "fr": "Identifiant du jeu",
+            "de": "Titel-ID",
+            "es": "ID del título"
+          }
+        },
+        {
+          "key": "platform",
+          "type": "string",
+          "label": {
+            "en": "Platform",
+            "fr": "Plateforme",
+            "de": "Plattform",
+            "es": "Plataforma"
+          }
+        }
+      ]
+    },
+    {
+      "key": "game_stopped",
+      "label": {
+        "en": "A game stopped",
+        "fr": "Un jeu s'est arrêté",
+        "de": "Ein Spiel wurde beendet",
+        "es": "Un juego ha terminado"
+      },
+      "description": {
+        "en": "The PSN account or a followed friend stopped playing (or switched to another game).",
+        "fr": "Le compte PSN ou un ami suivi a arrêté de jouer (ou est passé à un autre jeu).",
+        "de": "Das PSN-Konto oder ein verfolgter Freund hat aufgehört zu spielen (oder das Spiel gewechselt).",
+        "es": "La cuenta PSN o un amigo seguido dejó de jugar (o cambió de juego)."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Player",
+            "fr": "Joueur",
+            "de": "Spieler",
+            "es": "Jugador"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "online_id",
+          "type": "string",
+          "label": {
+            "en": "Online ID",
+            "fr": "Identifiant en ligne",
+            "de": "Online-ID",
+            "es": "ID en línea"
+          }
+        },
+        {
+          "key": "game",
+          "type": "string",
+          "label": {
+            "en": "Game",
+            "fr": "Jeu",
+            "de": "Spiel",
+            "es": "Juego"
+          }
+        },
+        {
+          "key": "title_id",
+          "type": "string",
+          "label": {
+            "en": "Title ID",
+            "fr": "Identifiant du jeu",
+            "de": "Titel-ID",
+            "es": "ID del título"
+          }
+        },
+        {
+          "key": "platform",
+          "type": "string",
+          "label": {
+            "en": "Platform",
+            "fr": "Plateforme",
+            "de": "Plattform",
+            "es": "Plataforma"
+          }
+        },
+        {
+          "key": "duration_minutes",
+          "type": "number",
+          "label": {
+            "en": "Session length (min)",
+            "fr": "Durée de la session (min)",
+            "de": "Sitzungsdauer (Min.)",
+            "es": "Duración de la sesión (min)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "trophy_earned",
+      "label": {
+        "en": "A trophy was earned",
+        "fr": "Un trophée a été obtenu",
+        "de": "Eine Trophäe wurde verdient",
+        "es": "Se ha conseguido un trofeo"
+      },
+      "description": {
+        "en": "The PSN account earned new trophies (checked every 15 minutes and at the end of each game).",
+        "fr": "Le compte PSN a obtenu de nouveaux trophées (vérifié toutes les 15 minutes et à la fin de chaque partie).",
+        "de": "Das PSN-Konto hat neue Trophäen verdient (alle 15 Minuten und am Ende jedes Spiels geprüft).",
+        "es": "La cuenta PSN consiguió nuevos trofeos (se comprueba cada 15 minutos y al final de cada partida)."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Player",
+            "fr": "Joueur",
+            "de": "Spieler",
+            "es": "Jugador"
+          }
+        },
+        {
+          "key": "grade",
+          "type": "multi_select",
+          "label": {
+            "en": "Grade",
+            "fr": "Catégorie",
+            "de": "Stufe",
+            "es": "Categoría"
+          },
+          "options": [
+            {
+              "value": "platinum",
+              "label": {
+                "en": "Platinum",
+                "fr": "Platine",
+                "de": "Platin",
+                "es": "Platino"
+              }
+            },
+            {
+              "value": "gold",
+              "label": {
+                "en": "Gold",
+                "fr": "Or",
+                "de": "Gold",
+                "es": "Oro"
+              }
+            },
+            {
+              "value": "silver",
+              "label": {
+                "en": "Silver",
+                "fr": "Argent",
+                "de": "Silber",
+                "es": "Plata"
+              }
+            },
+            {
+              "value": "bronze",
+              "label": {
+                "en": "Bronze",
+                "fr": "Bronze",
+                "de": "Bronze",
+                "es": "Bronce"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "online_id",
+          "type": "string",
+          "label": {
+            "en": "Online ID",
+            "fr": "Identifiant en ligne",
+            "de": "Online-ID",
+            "es": "ID en línea"
+          }
+        },
+        {
+          "key": "grade",
+          "type": "string",
+          "label": {
+            "en": "Grade",
+            "fr": "Catégorie",
+            "de": "Stufe",
+            "es": "Categoría"
+          }
+        },
+        {
+          "key": "count",
+          "type": "number",
+          "label": {
+            "en": "New trophies",
+            "fr": "Nouveaux trophées",
+            "de": "Neue Trophäen",
+            "es": "Trofeos nuevos"
+          }
+        },
+        {
+          "key": "total",
+          "type": "number",
+          "label": {
+            "en": "Total of this grade",
+            "fr": "Total de cette catégorie",
+            "de": "Gesamt dieser Stufe",
+            "es": "Total de esta categoría"
+          }
+        },
+        {
+          "key": "level",
+          "type": "number",
+          "label": {
+            "en": "Trophy level",
+            "fr": "Niveau de trophées",
+            "de": "Trophäenstufe",
+            "es": "Nivel de trofeos"
+          }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "get_player_status",
+      "label": {
+        "en": "Get a player's status",
+        "fr": "Lire le statut d'un joueur",
+        "de": "Status eines Spielers abrufen",
+        "es": "Leer el estado de un jugador"
+      },
+      "description": {
+        "en": "Reads the PlayStation Network now: online, game, play time. Without a player, the PSN account.",
+        "fr": "Lit le PlayStation Network maintenant : en ligne, jeu, temps de jeu. Sans joueur, le compte PSN.",
+        "de": "Liest jetzt das PlayStation Network: online, Spiel, Spielzeit. Ohne Spieler das PSN-Konto.",
+        "es": "Lee ahora PlayStation Network: en línea, juego, tiempo de juego. Sin jugador, la cuenta PSN."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Player",
+            "fr": "Joueur",
+            "de": "Spieler",
+            "es": "Jugador"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "key": "online",
+          "type": "boolean",
+          "label": {
+            "en": "Online",
+            "fr": "En ligne",
+            "de": "Online",
+            "es": "En línea"
+          }
+        },
+        {
+          "key": "in_game",
+          "type": "boolean",
+          "label": {
+            "en": "In game",
+            "fr": "En jeu",
+            "de": "Im Spiel",
+            "es": "Jugando"
+          }
+        },
+        {
+          "key": "game",
+          "type": "string",
+          "label": {
+            "en": "Game",
+            "fr": "Jeu",
+            "de": "Spiel",
+            "es": "Juego"
+          }
+        },
+        {
+          "key": "platform",
+          "type": "string",
+          "label": {
+            "en": "Platform",
+            "fr": "Plateforme",
+            "de": "Plattform",
+            "es": "Plataforma"
+          }
+        },
+        {
+          "key": "session_minutes",
+          "type": "number",
+          "label": {
+            "en": "Current session (min)",
+            "fr": "Session en cours (min)",
+            "de": "Aktuelle Sitzung (Min.)",
+            "es": "Sesión actual (min)"
+          }
+        },
+        {
+          "key": "today_minutes",
+          "type": "number",
+          "label": {
+            "en": "Played today (min)",
+            "fr": "Joué aujourd'hui (min)",
+            "de": "Heute gespielt (Min.)",
+            "es": "Jugado hoy (min)"
+          }
+        },
+        {
+          "key": "online_id",
+          "type": "string",
+          "label": {
+            "en": "Online ID",
+            "fr": "Identifiant en ligne",
+            "de": "Online-ID",
+            "es": "ID en línea"
+          }
+        }
+      ]
+    },
+    {
+      "key": "get_console_state",
+      "label": {
+        "en": "Get a console's state",
+        "fr": "Lire l'état d'une console",
+        "de": "Status einer Konsole abrufen",
+        "es": "Leer el estado de una consola"
+      },
+      "description": {
+        "en": "On, rest mode or off. Without a console, the first one found.",
+        "fr": "Allumée, en veille ou éteinte. Sans console, la première trouvée.",
+        "de": "Ein, Ruhemodus oder aus. Ohne Konsole die erste gefundene.",
+        "es": "Encendida, en reposo o apagada. Sin consola, la primera encontrada."
+      },
+      "timeout_seconds": 15,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Console",
+            "fr": "Console",
+            "de": "Konsole",
+            "es": "Consola"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "key": "power",
+          "type": "boolean",
+          "label": {
+            "en": "On",
+            "fr": "Allumée",
+            "de": "Ein",
+            "es": "Encendida"
+          }
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "label": {
+            "en": "State (on, standby, off, unknown)",
+            "fr": "État (on, standby, off, unknown)",
+            "de": "Status (on, standby, off, unknown)",
+            "es": "Estado (on, standby, off, unknown)"
+          }
+        },
+        {
+          "key": "name",
+          "type": "string",
+          "label": {
+            "en": "Console name",
+            "fr": "Nom de la console",
+            "de": "Name der Konsole",
+            "es": "Nombre de la consola"
+          }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "psn_status",
+      "label": {
+        "en": "PlayStation Network",
+        "fr": "PlayStation Network",
+        "de": "PlayStation Network",
+        "es": "PlayStation Network"
+      },
+      "description": {
+        "en": "Who plays what, play time, trophies and consoles.",
+        "fr": "Qui joue à quoi, temps de jeu, trophées et consoles.",
+        "de": "Wer was spielt, Spielzeit, Trophäen und Konsolen.",
+        "es": "Quién juega a qué, tiempo de juego, trofeos y consolas."
+      },
+      "icon": "monitor",
+      "settings": [
+        {
+          "key": "player",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Player",
+            "fr": "Joueur",
+            "de": "Spieler",
+            "es": "Jugador"
+          }
+        }
+      ],
+      "action_timeout_seconds": 30
+    }
+  ]
+}
