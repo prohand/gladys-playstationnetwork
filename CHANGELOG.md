@@ -6,6 +6,15 @@ All notable changes to this integration are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Catalog: search keywords (PS5, PS4, PSN, Sony, gaming…) and the new `leisure` shelf of the Gladys store.
+
+### Changed
+
+- Gladys 5.3.0 or later is now required.
+- Gladys integration SDK 0.16.
+
 ## [0.0.2] - 2026-10-23
 
 - Maintenance release, no functional change.

@@ -10,6 +10,7 @@ Trophäen deines Kontos und ob deine PS4 oder PS5 an, im Ruhemodus oder aus ist.
 
 Du brauchst:
 
+- Gladys **5.3.0** oder neuer;
 - ein PlayStation-Network-Konto (dessen Spiele und Trophäen du verfolgen willst);
 - einen Computer mit Webbrowser, um einmal das **NPSSO-Token** abzurufen;
 - für die Konsolen (optional): eine PS4 oder PS5 im selben Netzwerk wie Gladys.
