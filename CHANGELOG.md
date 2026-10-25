@@ -6,6 +6,8 @@ All notable changes to this integration are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-25
+
 ### Added
 
 - Catalog: search keywords (PS5, PS4, PSN, Sony, gaming…) and the new `leisure` shelf of the Gladys store.
@@ -34,6 +36,7 @@ All notable changes to this integration are documented here. The format follows
 - "Test the connection" and "Find my consoles" buttons in the configuration.
 - English, French, German and Spanish everywhere: configuration, messages, widget and documentation.
 
-[Unreleased]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.0.2...HEAD
+[Unreleased]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.0.2...v0.1.0
 [0.0.2]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/prohand/gladys-playstationnetwork/releases/tag/v0.0.1
