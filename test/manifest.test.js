@@ -83,6 +83,27 @@ test('the capability fields require Gladys >= 5.1.0', () => {
   assert.ok(major > 5 || (major === 5 && minor >= 1), manifest.gladys_version);
 });
 
+test('keywords, countries and music require Gladys >= 5.3.0', () => {
+  const [major, minor] = minGladysVersion();
+  if (['keywords', 'countries', 'music'].some((field) => field in manifest)) {
+    assert.ok(major > 5 || (major === 5 && minor >= 3), manifest.gladys_version);
+  }
+});
+
+test('1 to 10 unique search keywords of 2 to 30 characters', () => {
+  const { keywords } = manifest;
+  assert.ok(Array.isArray(keywords) && keywords.length >= 1 && keywords.length <= 10);
+  const normalized = keywords.map((keyword) => keyword.trim().toLowerCase());
+  assert.equal(new Set(normalized).size, keywords.length, 'duplicate keyword');
+  for (const keyword of normalized) {
+    assert.ok(keyword.length >= 2 && keyword.length <= 30, `keyword "${keyword}"`);
+  }
+});
+
+test('no countries: the PlayStation Network is worldwide', () => {
+  assert.equal(manifest.countries, undefined);
+});
+
 test('both transports are declared: the PSN (cloud) and the console on the LAN (local)', () => {
   assert.deepEqual(manifest.transports, ['local', 'cloud']);
   assert.ok(
@@ -152,6 +173,29 @@ test('the catalog description holds 10 to 100 characters per language', () => {
   }
 });
 
-test('1 to 3 catalog categories', () => {
+const CATALOG_CATEGORIES = [
+  'climate',
+  'lighting',
+  'energy',
+  'security',
+  'multimedia',
+  'appliances',
+  'environment',
+  'protocols',
+  'network',
+  'notifications',
+  'assistants',
+  'services',
+  'transport',
+  'vehicles',
+  'servers',
+  'leisure',
+];
+
+test('1 to 3 catalog categories, from the store vocabulary', () => {
   assert.ok(manifest.categories.length >= 1 && manifest.categories.length <= 3);
+  for (const category of manifest.categories) {
+    assert.ok(CATALOG_CATEGORIES.includes(category), category);
+  }
+  assert.ok(manifest.categories.includes('leisure'));
 });

@@ -10,6 +10,7 @@ of your account, and whether your PS4 or PS5 is on, in rest mode or off.
 
 You need:
 
+- Gladys **5.3.0** or later;
 - a PlayStation Network account (the one whose games and trophies you want to follow);
 - a computer with a web browser, to get the **NPSSO token** once;
 - for the consoles (optional): a PS4 or PS5 on the same network as Gladys.

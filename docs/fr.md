@@ -10,6 +10,7 @@ trophées de votre compte, et si votre PS4 ou PS5 est allumée, en veille ou ét
 
 Il vous faut :
 
+- Gladys **5.3.0** ou plus récent ;
 - un compte PlayStation Network (celui dont vous voulez suivre les jeux et les trophées) ;
 - un ordinateur avec un navigateur web, pour récupérer une fois le **jeton NPSSO** ;
 - pour les consoles (facultatif) : une PS4 ou une PS5 sur le même réseau que Gladys.

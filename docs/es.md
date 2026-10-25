@@ -10,6 +10,7 @@ cuenta, y si su PS4 o PS5 está encendida, en reposo o apagada.
 
 Necesita:
 
+- Gladys **5.3.0** o posterior;
 - una cuenta de PlayStation Network (la cuenta cuyos juegos y trofeos quiere seguir);
 - un ordenador con un navegador web, para obtener una vez el **token NPSSO**;
 - para las consolas (opcional): una PS4 o PS5 en la misma red que Gladys.

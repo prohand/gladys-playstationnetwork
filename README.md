@@ -33,7 +33,7 @@ the `cloud` channel. The standard **"Prefer the local connection"** toggle of Gl
 channel; the other one is the fallback, and the badge of the device then shows a **degraded**
 dot with the reason.
 
-Gladys **5.1+** capabilities:
+Gladys capabilities (the integration requires Gladys **5.3.0** or later):
 
 | Capability                         | Key                 | What it gives                                                               |
 | ---------------------------------- | ------------------- | --------------------------------------------------------------------------- |

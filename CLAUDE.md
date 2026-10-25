@@ -7,9 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 A Gladys Assistant **external integration** (Node 22+, ESM, no build step, one runtime
 dependency: `@gladysassistant/integration-sdk`) for the **PlayStation Network**: presence,
 current game, play time and trophies of the PSN account and of up to 10 friends, plus the
-power state of the PS4 / PS5 consoles of the LAN. Gladys 5.1+ adds scene triggers (game
+power state of the PS4 / PS5 consoles of the LAN. Requires Gladys 5.3+; scene triggers (game
 started, game stopped, trophy earned), scene actions (player status, console state) and a
-"PlayStation Network" widget.
+"PlayStation Network" widget come with it.
 
 Started from the official
 [JavaScript template](https://github.com/GladysAssistant/integration-template-js); the CI and
@@ -82,7 +82,9 @@ src/actions.js            "Test the connection" and "Find my consoles"
 
 `test/manifest.test.js` keeps `gladys-assistant-integration.json` in sync with the code
 (defaults, handlers, triggers, DDP ports) and checks that **every text exists in en, fr, de and
-es**. Capability fields require `gladys_version >= 5.1.0`.
+es**. Capability fields require `gladys_version >= 5.1.0`, the store fields `keywords` /
+`countries` / `music` `>= 5.3.0` (the floor today); `categories` take the store vocabulary
+(`leisure` included).
 
 ## Testing
 
