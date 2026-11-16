@@ -6,6 +6,10 @@ All notable changes to this integration are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-16
+
+- Maintenance release, no functional change.
+
 ## [0.1.0] - 2026-10-25
 
 ### Added
@@ -36,7 +40,8 @@ All notable changes to this integration are documented here. The format follows
 - "Test the connection" and "Find my consoles" buttons in the configuration.
 - English, French, German and Spanish everywhere: configuration, messages, widget and documentation.
 
-[Unreleased]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.0.2...v0.1.0
 [0.0.2]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/prohand/gladys-playstationnetwork/releases/tag/v0.0.1
