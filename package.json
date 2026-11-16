@@ -1,6 +1,6 @@
 {
   "name": "gladys-playstationnetwork",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "description": "Gladys Assistant external integration for the PlayStation Network: presence, games, trophies and console status.",
   "type": "module",
