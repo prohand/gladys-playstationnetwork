@@ -6,6 +6,10 @@ All notable changes to this integration are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-11-16
+
+- Maintenance release, no functional change.
+
 ## [0.1.2] - 2026-11-16
 
 - Update `@gladysassistant/integration-sdk` to 0.16.1 (security update).
@@ -44,7 +48,8 @@ All notable changes to this integration are documented here. The format follows
 - "Test the connection" and "Find my consoles" buttons in the configuration.
 - English, French, German and Spanish everywhere: configuration, messages, widget and documentation.
 
-[Unreleased]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/prohand/gladys-playstationnetwork/compare/v0.0.2...v0.1.0
